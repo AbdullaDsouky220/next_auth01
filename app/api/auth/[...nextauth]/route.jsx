@@ -37,16 +37,11 @@ export const authOptions={
                 },
             },
             async authorize(credentials){
-                const user={
-                    id:1,
-                    name:'abdullah dsou',
-                    email:"abdodsouky@gmail.com"
-                }
-                return user
+               
             }
         })
     ],
-    secret:process.env.SECRET,
+    secret:process.env.NEXTAUTH_SECRET    ,
     debug: process.env.NODE_ENV === "development",
     session:{
         strategy:"jwt"

@@ -1,12 +1,25 @@
 "use client";
 import { signIn } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 function Login() {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
+
+  const router=useRouter()
+  const {data:session}=useSession()
+
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+       router.push('/dashboard') 
+    }
+})
+
+  
 
   const LoginUser = async (e) => {
     e.preventDefault();
@@ -17,6 +30,7 @@ function Login() {
           toast.error(callback.error);
         } else if (callback.ok) {
           toast.success("user signin successfully");
+          router.push('/dashboard')
         }
       }
     );
@@ -48,7 +62,7 @@ function Login() {
           <div className="absolute -top-40 -right-0 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
           <div className="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
         </div>
-        <div className="flex flex-col md:w-1/2 justify-center py-10 items-center bg-white">
+        <div className="flex gap-4 flex-col md:w-1/2 justify-center py-10 items-center bg-white">
           <form
             className="bg-white text-slate-400"
             onSubmit={(e) => LoginUser(e)}
@@ -124,9 +138,9 @@ function Login() {
           </form>
           <button
             onClick={() => signIn("github")}
-            aria-label="Continue with github"
+            ariaLabel="Continue with github"
             role="button"
-            class="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center max-w-[300px] mt-4"
+            className="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center max-w-[300px] "
           >
             <svg
               width="21"
@@ -141,15 +155,16 @@ function Login() {
               />
             </svg>
 
-            <p class="text-base font-medium ml-4 text-gray-700">
+            <p className="text-base font-medium ml-4 text-gray-700">
               Continue with Github
             </p>
           </button>
           <button
-            aria-label="Continue with google"
+          // onClick={()=>signIn('google')}
+          onClick={() => signIn("google")}
+            ariaLabel="Continue with google"
             role="button"
-            class="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10"
-          >
+            className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center max-w-[300px] "  >
             <svg
               width="19"
               height="20"
@@ -174,7 +189,7 @@ function Login() {
                 fill="#EB4335"
               />
             </svg>
-            <p class="text-base font-medium ml-4 text-gray-700">
+            <p className="text-base font-medium ml-4 text-gray-700">
               Continue with Google
             </p>
           </button>
